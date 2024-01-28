@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract Number from HTML Page</title>
+</head>
+<body>
+
+<script>
+    // Function to fetch and extract the number
+    function extractNumber() {
+        // Make an HTTP request to the target URL
+        fetch('https://www.reynaers.be/vakmannen?f%5B0%5D=project_type%3AProfessional')
+            .then(response => response.text())
+            .then(html => {
+                // Create a virtual DOM element to parse the HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Extract the number from the specified element
+                const numberElement = doc.getElementById('search-overview-counter-replace');
+                if (numberElement) {
+                    const numberText = numberElement.textContent.trim();
+                    const number = parseInt(numberText, 10);
+
+                    // Display the extracted number
+                    console.log('Number:', number);
+                } else {
+                    console.error('Element with ID "search-overview-counter-replace" not found.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching or parsing the HTML:', error);
+            });
+    }
+
+    // Call the function to extract the number
+    extractNumber();
+</script>
+
+</body>
+</html>
