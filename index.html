@@ -3,37 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scrape HTML Content</title>
+    <title>Count JSON Items</title>
 </head>
 <body>
 
 <script>
-    // Function to fetch and scrape the HTML content
-    function scrapeHTML() {
-        const url = 'https://www.reynaers.be/vakmannen?f%5B0%5D=project_type%3AProfessional';
+    // Function to count the number of items in a JSON array
+    function countJSONItems() {
+        const url = 'https://www.reynaers.be/map/marker/dealers';
 
-        // Fetch the HTML content with CORS disabled
+        // Fetch the JSON data
         fetch(url, { mode: 'no-cors' })
-            .then(response => response.text())
-            .then(html => {
-                // Create a virtual DOM element to parse the HTML
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-
-                // Extract the number from the specified ID
-                const searchCounterElement = doc.getElementById('search-overview-counter-replace');
-                const number = searchCounterElement ? searchCounterElement.textContent.trim() : 'Not found';
-
-                // Display the extracted number
-                console.log('Number:', number);
+            .then(response => response.json())
+            .then(data => {
+                // Check if the data is an array
+                if (Array.isArray(data)) {
+                    const itemCount = data.length;
+                    console.log('Number of items:', itemCount);
+                } else {
+                    console.error('The fetched data is not an array.');
+                }
             })
             .catch(error => {
-                console.error('Error fetching or parsing the HTML:', error);
+                console.error('Error fetching or parsing the JSON:', error);
             });
     }
 
-    // Call the scraping function
-    scrapeHTML();
+    // Call the counting function
+    countJSONItems();
 </script>
 
 </body>
