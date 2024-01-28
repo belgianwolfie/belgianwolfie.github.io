@@ -1,37 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Count JSON Items</title>
-</head>
-<body>
+<?php
 
-<script>
-    // Function to count the number of items in a JSON array
-    function countJSONItems() {
-        const url = 'https://www.reynaers.be/map/marker/dealers';
+// Function to count items in the array
+function countItems() {
+    $url = 'https://www.reynaers.be/map/marker/dealers';
 
-        // Fetch the JSON data
-        fetch(url, { mode: 'no-cors' })
-            .then(response => response.json())
-            .then(data => {
-                // Check if the data is an array
-                if (Array.isArray(data)) {
-                    const itemCount = data.length;
-                    console.log('Number of items:', itemCount);
-                } else {
-                    console.error('The fetched data is not an array.');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching or parsing the JSON:', error);
-            });
+    // Fetch the JSON data
+    $jsonData = file_get_contents($url);
+
+    if ($jsonData === false) {
+        die('Error fetching the data.');
     }
 
-    // Call the counting function
-    countJSONItems();
-</script>
+    // Decode JSON data
+    $data = json_decode($jsonData, true);
 
-</body>
-</html>
+    if ($data === null) {
+        die('Error parsing the JSON data.');
+    }
+
+    // Check if the data is an array
+    if (is_array($data)) {
+        $itemCount = count($data);
+        echo 'Number of items: ' . $itemCount;
+    } else {
+        die('The retrieved data is not an array.');
+    }
+}
+
+// Call the counting function
+countItems();
+
+?>
