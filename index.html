@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extract Number from HTML Page</title>
+    <title>Scrape HTML Content</title>
 </head>
 <body>
 
 <script>
-    // Function to fetch and extract the number
-    function extractNumber() {
-        // Make an HTTP request to the target URL
-        fetch('https://www.reynaers.be/vakmannen?f%5B0%5D=project_type%3AProfessional')
+    // Function to fetch and scrape the HTML content
+    function scrapeHTML() {
+        const url = 'https://www.reynaers.be/vakmannen?f%5B0%5D=project_type%3AProfessional';
+
+        // Fetch the HTML content with CORS disabled
+        fetch(url, { mode: 'no-cors' })
             .then(response => response.text())
             .then(html => {
                 // Create a virtual DOM element to parse the HTML
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
 
-                // Extract the number from the specified element
-                const numberElement = doc.getElementById('search-overview-counter-replace');
-                if (numberElement) {
-                    const numberText = numberElement.textContent.trim();
-                    const number = parseInt(numberText, 10);
+                // Extract the number from the specified ID
+                const searchCounterElement = doc.getElementById('search-overview-counter-replace');
+                const number = searchCounterElement ? searchCounterElement.textContent.trim() : 'Not found';
 
-                    // Display the extracted number
-                    console.log('Number:', number);
-                } else {
-                    console.error('Element with ID "search-overview-counter-replace" not found.');
-                }
+                // Display the extracted number
+                console.log('Number:', number);
             })
             .catch(error => {
                 console.error('Error fetching or parsing the HTML:', error);
             });
     }
 
-    // Call the function to extract the number
-    extractNumber();
+    // Call the scraping function
+    scrapeHTML();
 </script>
 
 </body>
